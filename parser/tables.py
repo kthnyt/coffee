@@ -2,7 +2,7 @@ import os
 
 from bs4 import BeautifulSoup
 
-from pandas.io.common import _is_url, urlopen
+from pandas.io.common import is_url, urlopen
 from pandas.compat import string_types, binary_type
 
 char_types = string_types + (binary_type,)
@@ -30,6 +30,15 @@ class Table:
         self.io = io
         self.encoding = encoding
 
+    # def _decompose_xmlns_link(self, doc):
+    #     from bs4 import SoupStrainer
+
+    #     _strainer = SoupStrainer('link')
+    #     element_name  = _strainer.name
+
+    #     links = doc.find_all(element_name, attrs=attrs)
+
+
     def _read(obj):
         """Try to read from a url, file or string.
         Parameters
@@ -39,7 +48,7 @@ class Table:
         -------
         raw_text : str
         """
-        if _is_url(obj):
+        if is_url(obj):
             with urlopen(obj) as url:
                 text = url.read()
         elif hasattr(obj, 'read'):
@@ -68,5 +77,4 @@ class Table:
         return BeautifulSoup(self._setup_build_doc(), features='html5lib',
                                 from_encoding=self.encoding)
 
-    def _decompose_xmlns_attrs(self):
 

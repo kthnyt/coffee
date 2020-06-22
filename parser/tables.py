@@ -52,12 +52,7 @@ class Table:
         self.encoding = encoding
 
     def _decompose_xmlns_link(self, doc):
-        from bs4 import SoupStrainer
-
-        _strainer = SoupStrainer('link')
-        element_name  = _strainer.name
-
-        links = doc.find_all(element_name)
+        links = doc.find_all('link')
 
         if not links:
             raise ValueError("No links found")
@@ -65,6 +60,10 @@ class Table:
         for link in links:
             link.decompose()
 
+        return doc
+
+    def _remove_html_xmlns_attrs(self, doc):
+        doc.html.attrs = {}
         return doc
 
     def _setup_build_doc(self):

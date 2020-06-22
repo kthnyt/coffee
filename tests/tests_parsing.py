@@ -26,8 +26,19 @@ def test_decompose_links_soup():
 
     assert(isinstance(type(decompose_soup), type(BeautifulSoup)))
 
-def test_decompose_links():
+def test_decomposed_links():
     decomposed_table = table._decompose_xmlns_link(table._build_doc())
     links = decomposed_table.find_all('link')
 
-    assert(not links) 
+def test_remove_html_attrs():
+    decomposed_table = table._decompose_xmlns_link(table._build_doc())
+    html = decomposed_table.html
+    
+    assert('xmlns' in html.attrs)
+
+    
+def test_remove_html_attrs():
+    removed_table = table._remove_html_xmlns_attrs(table._decompose_xmlns_link(table._build_doc()))
+    html = removed_table.html
+    
+    assert('xmlns' not in html.attrs)

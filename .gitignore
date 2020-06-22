@@ -1,2 +1,4 @@
 env/
 __pycache__/
+tests/test_addition.py
+parser/__init__.py

@@ -53,7 +53,7 @@ class Table:
                 text = url.read()
         elif hasattr(obj, 'read'):
             text = obj.read()
-        elif isinstance(obj, char_types):
+        elif isinstance(obj, (str, bytes)):
             text = obj
             try:
                 if os.path.isfile(text):
@@ -62,7 +62,7 @@ class Table:
             except (TypeError, ValueError):
                 pass
         else:
-            raise TypeError("Cannot read object of type %r" % type(obj).__name__)
+            raise TypeError(f"Cannot read object of type '{type(obj).__name__}'")
         return text
 
     def _setup_build_doc(self):

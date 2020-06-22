@@ -1,14 +1,12 @@
 from bs4 import BeautifulSoup
-# from cssutils import parseStyle
 import os
-import sys
 import time
 
 def get_html_style_table_elements(PATH, htm_filename):
     '''Get style and table elements from html file'''
     print('Editing: ' + htm_filename)
     # read htm file
-    with open(PATH + htm_filename, 'r') as f:
+    with open(PATH + htm_filename, 'r', encoding="windows-1252") as f:
         html_file = f.read()
         f.close()
 
@@ -50,11 +48,7 @@ def element_centering(elem):
 
     return elem
 
-# get report folder from system args
-if sys.argv[1]:
-    PATH =  f'C:\\Users\\keith\\Google Drive\\MMS\\kp2\\tables\\tables_{sys.argv[1]}\\'
-else:
-    'C:\\Users\\keith\\Google Drive\\MMS\\kp2\\tables\\'
+PATH =  '.\\html\\'
 
 def main(PATH=PATH):
     while True:

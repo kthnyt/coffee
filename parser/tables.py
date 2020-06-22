@@ -1,8 +1,36 @@
 import os
 
-from bs4 import BeautifulSoup
+from pandas.compat._optional import import_optional_dependency
 
-from pandas.io.common import is_url, urlopen
+_IMPORTS = False
+_HAS_BS4 = False
+_HAS_PANDAS = False
+_HAS_HTML5LIB = False
+
+
+def _importers():
+    # import things we need
+    # but make this done on a first use basis
+
+    global _IMPORTS
+    if _IMPORTS:
+        return
+
+    global _HAS_BS4, _HAS_PANDAS, _HAS_HTML5LIB
+    bs4 = import_optional_dependency("bs4", raise_on_missing=False, on_version="ignore")
+    _HAS_BS4 = bs4 is not None
+
+    pandas = import_optional_dependency(
+        "pandas", raise_on_missing=False, on_version="ignore"
+    )
+    _HAS_PANDAS = pandas is not None
+
+    html5lib = import_optional_dependency(
+        "html5lib", raise_on_missing=False, on_version="ignore"
+    )
+    _HAS_HTML5LIB = html5lib is not None
+
+    _IMPORTS = True
 
 def _read(obj):
     """
@@ -14,6 +42,8 @@ def _read(obj):
     -------
     raw_text : str
     """
+    from pandas.io.common import is_url, urlopen
+
     if is_url(obj):
         with urlopen(obj) as url:
             text = url.read()

@@ -5,9 +5,8 @@ from bs4 import BeautifulSoup
 from pandas.io.common import _is_url, urlopen
 from pandas.compat import string_types, binary_type
 
-class LoadTable:
-    '''1. Local, 2. Remote (select using local variable)'''
-    
+char_types = string_types + (binary_type,)
+
 
 class Table:
     '''Base class to parse a custom HTML <table> into a HTML WIRE tile.
@@ -27,7 +26,7 @@ class Table:
         Encoding to be used by parser
     '''
 
-    def __init_(self, io, encoding='windows-1252'):
+    def __init__(self, io, encoding='windows-1252'):
         self.io = io
         self.encoding = encoding
 
@@ -62,8 +61,12 @@ class Table:
         if not raw_text:
             raise ValueError('No text parsed from document: {doc}'
                                 .format(doc=self.io))
+        return raw_text
 
     def _build_doc(self):
         from bs4 import BeautifulSoup
         return BeautifulSoup(self._setup_build_doc(), features='html5lib',
                                 from_encoding=self.encoding)
+
+    def _decompose_xmlns_attrs(self):
+

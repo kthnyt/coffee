@@ -50,6 +50,7 @@ class Table:
     def __init__(self, io, encoding='windows-1252'):
         self.io = io
         self.encoding = encoding
+        self.text = ''
 
     def _decompose_xmlns_link(self, doc):
         links = doc.find_all('link')
@@ -66,10 +67,42 @@ class Table:
         doc.html.attrs = {}
         return doc
 
+    def apply_responsive_table_width(self, elem):
+        
+
+    # Apply table centering
+    def align_element_center(self, elem):
+        '''Takes a BeautifulSoup elemnt and adds centering'''
+        try:
+            if ('margin-left' not in elem['style']):
+                elem['style'] += ';margin-left: auto'
+
+            if ('margin-right' not in elem['style']):
+                elem['style'] += ';margin-right: auto'
+
+            assert(';margin-left: auto;margin-right: auto' in elem['style'])
+        except:
+            print('Custom ERROR: problem centering element')
+
+        return elem
+
+    def _extract_style_and_table_elems(self, doc):
+        # save style & table elements in new htm file
+        style = doc.find('style')
+        table = doc.find('table')
+
+        # centering
+        table = align_element_center(table)
+
+        doc = style + table
+        self.text = str(doc)
+        return doc
+
     def _setup_build_doc(self):
         raw_text = _read(self.io)
         if not raw_text:
             raise ValueError(f"No text parsed from document: {self.io}")
+        self.text = raw_text
         return raw_text
 
     def _build_doc(self):

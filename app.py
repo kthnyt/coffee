@@ -1,16 +1,33 @@
 import os
-from flask import Flask, render_template
+import sys
+import numpy as np
+from bs4 import BeautifulSoup
+
+from flask import Flask, render_template, request
+from werkzeug.utils import secure_filename
+
+from tables import Table
 
 
 app = Flask(__name__)
-
-# use the correct env (local, staging, production)
 app.config.from_object(os.environ['APP_SETTINGS'])
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    result = ''
+    return render_template('parser.html', result=result)
+
+@app.route('/parser', methods=['GET', 'POST'])
+def parser():
+    result = ''
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+
+        table = Table(f.filename)
+        result = table._remove_html_xmlns_attrs(table._decompose_xmlns_link(table._build_doc()))
+    return render_template('parser.html', result=result)
 
 
 if __name__ == '__main__':

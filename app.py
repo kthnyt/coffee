@@ -15,8 +15,9 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    result = ''
-    return render_template('parser.html', result=result)
+    with open('./templates/table_frame.html', 'w') as f:
+        f.write('')
+    return render_template('parser.html')
 
 @app.route('/parser', methods=['GET', 'POST'])
 def parser():
@@ -27,9 +28,9 @@ def parser():
 
         table = Table(f.filename)
         result = table._extract_style_and_table_elems(table._build_doc())
-        with open('./templates/table_frame.html', 'w') as f:
-            f.write(result)
-            
+        with open('./templates/table_frame.html', 'w') as ff:
+            ff.write(result)
+
         os.remove(f.filename)
 
     return render_template('parser.html', result=result)

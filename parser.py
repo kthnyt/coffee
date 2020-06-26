@@ -78,6 +78,8 @@ class Table:
         for col in cols:
             col_style = parseStyle(col['style'])
             col_width_pt = col_style['width'] #pt
+            if not elem_width_pt.rstrip('pt'):
+                elem_width_pt = col_width_pt
             col_width_pct = 100 * float(col_width_pt.rstrip('pt')) / float(elem_width_pt.rstrip('pt'))
             col_width_pct = str(round(col_width_pct, 1)) + '%'
             col_style['width'] = col_width_pct

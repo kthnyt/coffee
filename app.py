@@ -27,8 +27,16 @@ def parser():
 
         table = Table(f.filename)
         result = table._extract_style_and_table_elems(table._build_doc())
-        results = table.text
+        with open('./templates/table_frame.html', 'w') as f:
+            f.write(result)
+            
+        os.remove(f.filename)
+
     return render_template('parser.html', result=result)
+
+@app.route('/table')
+def table():
+    return render_template('table.html')
 
 
 if __name__ == '__main__':

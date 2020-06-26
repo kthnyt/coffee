@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 
-from tables import Table
+from parser import Table
 
 
 app = Flask(__name__)

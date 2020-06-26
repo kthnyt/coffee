@@ -1,4 +1,6 @@
 import os
+from cssutils import parseStyle
+
 
 def _read(obj):
     """
@@ -68,7 +70,24 @@ class Table:
         return doc
 
     def apply_responsive_table_width(self, elem):
-        
+        elem['style']
+        elem_style = parseStyle(elem['style'])
+        elem_width_pt = elem_style['width'] #pt
+
+        cols = elem.find_all('col')
+        for col in cols:
+            col_style = parseStyle(col['style'])
+            col_width_pt = col_style['width'] #pt
+            col_width_pct = 100 * float(col_width_pt.rstrip('pt')) / float(elem_width_pt.rstrip('pt'))
+            col_width_pct = str(round(col_width_pct, 1)) + '%'
+            col_style['width'] = col_width_pct
+            col['style'] = col_style.cssText
+
+        elem_width_pct = 100 * float(elem_width_pt.rstrip('pt')) / float(elem_width_pt.rstrip('pt'))
+        elem_width_pct = str(round(elem_width_pct, 1)) + '%'
+        elem_style['width'] = elem_width_pct
+        elem['style'] = elem_style.cssText
+        return elem
 
     # Apply table centering
     def align_element_center(self, elem):
@@ -92,11 +111,14 @@ class Table:
         table = doc.find('table')
 
         # centering
-        table = align_element_center(table)
+        table = self.align_element_center(table)
 
-        doc = style + table
-        self.text = str(doc)
-        return doc
+        # max table width
+        table = self.apply_responsive_table_width(table)
+
+        doc_text = str(style) + '\n\n' + str(table)
+        self.text = doc_text
+        return doc_text
 
     def _setup_build_doc(self):
         raw_text = _read(self.io)

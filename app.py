@@ -26,7 +26,8 @@ def parser():
         f.save(secure_filename(f.filename))
 
         table = Table(f.filename)
-        result = table._remove_html_xmlns_attrs(table._decompose_xmlns_link(table._build_doc()))
+        result = table._extract_style_and_table_elems(table._build_doc())
+        results = table.text
     return render_template('parser.html', result=result)
 
 

@@ -111,7 +111,7 @@ class Table:
         # save style & table elements in new htm file
         style = doc.find('style')
         table = doc.find('table')
-
+        print(table)
         # centering
         table = self.align_element_center(table)
 

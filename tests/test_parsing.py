@@ -2,10 +2,10 @@ import os
 import sys
 from bs4 import BeautifulSoup
 
-sys.path.append(os.path.abspath('..\\parser\\'))
-from tables import Table
+from parser import Table
 
-PATH = "..\\html\\GIP_1_mill_lock_up_v03.htm"
+PATH = "..\\html\\GIP_1_mill_lock_up_v03.htm" # Windows
+PATH = "GIP_1_mill_lock_up_v03.htm" # Ubuntu
 
 table = Table(PATH)
 
